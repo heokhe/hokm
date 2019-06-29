@@ -1,0 +1,6 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+button {
+  @apply px-4 py-2 rounded shadow-lg text-lg font-medium uppercase m-2 mt-4;
+}
