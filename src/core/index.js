@@ -58,6 +58,10 @@ export default class Game extends EE3 {
 
     // eslint-disable-next-line no-console
     console.log(`[${player.name}]`, card);
+
+    if (card.type !== base && card.owner.availableCards.some(c => c.type === base)) {
+      throw new Error('hokm bia');
+    }
     if (card.owner !== player || card.isMoved) throw new Error('shit');
     if (!trump) throw new Error('vaisa!');
     if (!player.mustMove) throw new Error('wait. that\'s illegal.');
