@@ -29,13 +29,11 @@ export default {
       plugins: [
         postcssImport,
         tailwind('tailwind.config.js'),
-        ...production ? [
-          autoprefixer,
-          purgeCss({
-            content: ['./src/**/*.svelte', './public/index.html'],
-            defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || []
-          })
-        ] : []
+        purgeCss({
+          content: ['./src/**/*.svelte', './public/index.html'],
+          defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || []
+        }),
+        production && autoprefixer
       ].filter(Boolean),
       extract: 'public/bundle.css',
       minimize: production
