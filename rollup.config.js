@@ -8,6 +8,7 @@ import postcss from 'rollup-plugin-postcss';
 import svelte from 'rollup-plugin-svelte';
 import { terser } from 'rollup-plugin-terser';
 import tailwind from 'tailwindcss';
+import buble from 'rollup-plugin-buble';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -42,6 +43,7 @@ export default {
     resolve({ browser: true }),
     commonjs(),
     !production && livereload('public'),
+    production && buble(),
     production && terser()
   ],
   watch: {
