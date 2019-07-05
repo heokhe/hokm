@@ -6,7 +6,7 @@ export class Player {
    * @param {import('.').default} game
    */
   constructor(name, game, onActivate = () => {}) {
-    this.id = name;
+    this.name = name;
     this.game = game;
     /** @type {Team} */ this.team = null;
     /** @type {import('./card').Card[]} */ this.cards = [];
@@ -20,11 +20,10 @@ export class Player {
 
   get availableCards() {
     return this.cards.filter(card => !card.isMoved);
-    return this.cards.filter((_, i) => !this.history.includes(i));
   }
 
   get isTrumpCaller() {
-    return this.game.tcid === this.id;
+    return this.game.tcid === this.name;
   }
 
   /** @param {Team} team */
@@ -59,6 +58,6 @@ export class Team {
   }
 
   get rivalTeam() {
-    return this.game.teams.find(t => t !== this);
+    return this.members[0].game.teams.find(t => t !== this);
   }
 }

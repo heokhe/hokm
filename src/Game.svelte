@@ -3,7 +3,7 @@ import Card from './components/Card.svelte';
 import GameHeader from './components/GameHeader.svelte';
 import CardIcon from './components/CardIcon.svelte';
 import { onMount } from 'svelte';
-import { CARD_TYPES } from './core/utils/';
+import { CARD_TYPES } from './core/card';
 import { game, isPlaying } from './store';
 $: mustSelectTrumpSuite = !$game.trumpSuite;
 let moves, base, cards = [], tricks;
@@ -14,8 +14,8 @@ onMount(() => {
   tricks = [0,0];
 })
 $game.on('move', () => {
-  cards = $game.me.availableCards
-  moves = $game.moves
+  cards = $game.me.availableCards;
+  moves = $game.activeCards;
   base = $game.baseSuite;
   tricks = $game.tricks;
 })
@@ -51,7 +51,7 @@ $game.on('end', ({ winner: { members: [a, b] } }) => {
   <div class="cards text-center block flex-shrink-0 pl-2 pt-2 border-grey-100 border-t">
     {#each cards as card, i}
       {#if !mustSelectTrumpSuite || i < 5}
-        <Card {...card} on:click={() => $game.me.move(card)} />
+        <Card number={card.number} type={card.type} on:click={() => $game.me.move(card)} />
       {/if}
     {/each}
   </div>

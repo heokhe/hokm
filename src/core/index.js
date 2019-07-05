@@ -6,9 +6,7 @@ import wrapAsBot from './bot';
 
 /**
  * @typedef {import('./player').Player} Player
- * @typedef {'G'|'K'|'P'|'D'} CardType
- * @typedef {{ type: CardType, number: number }} Card
- * @typedef {{ player: Player, card: Card }} Move
+ * @typedef {{ player: Player, card: import('./card').Card }} Move
  */
 
 export default class Game extends EE3 {
@@ -23,7 +21,7 @@ export default class Game extends EE3 {
     const cards = getCards(),
       players = R.range(0, 4).map((_, i) => {
         const p = i ? wrapAsBot(new Player(`b-${i}`, this)) : new Player('me', this);
-        p.cards = cards.shift();
+        p.useCards(cards.shift());
         return p;
       }),
       [a, b, c, d] = players;
@@ -31,11 +29,11 @@ export default class Game extends EE3 {
     this.players = players;
     players.forEach(p => p.onActivate());
 
-    this.tcid = players[0].id;
+    this.tcid = players[0].name;
     /** @type {number} */ this.turn = 0;
-    /** @type {CardType} */ this.baseSuite = null;
-    /** @type {CardType} */ this.trumpSuite = null;
-    /** @type {Move[]} */ this.moves = [];
+    /** @type {import('./card').CardType} */ this.baseSuite = null;
+    /** @type {import('./card').CardType} */ this.trumpSuite = null;
+    /** @type {Move[]} */ this.activeCards = [];
   }
 
   get tricks() {
@@ -47,7 +45,7 @@ export default class Game extends EE3 {
   }
 
   get trumpCaller() {
-    return this.players.find(p => p.id === this.tcid);
+    return this.players.find(p => p.name === this.tcid);
   }
 
   teamOf(player) {
@@ -56,47 +54,32 @@ export default class Game extends EE3 {
 
   /**
    * @param {Player} player
-   * @param {Card} card
+   * @param {import('./card').Card} card
    */
   handleMove(player, card) {
     const {
-        moves, trumpSuite, baseSuite, turn
+        activeCards, trumpSuite, baseSuite, turn
       } = this,
       move = { player, card };
 
-    console.log(`[${player.id}]`, card);
+    console.log(`[${player.name}]`, card);
+    if (card.owner !== player || card.isMoved) throw new Error('shit');
     if (!trumpSuite) throw new Error('vaisa!');
     if (!player.mustMove) throw new Error('wait. that\'s illegal.');
-    if (moves.length === 0 && this.totalTricks === 0
-      && card.type !== trumpSuite) throw new Error('hokm o bia koskesh');
+    if (activeCards.length === 0 && this.totalTricks === 0 && card.type !== trumpSuite) throw new Error('hokm o bia koskesh');
 
-    moves.push(move);
-    player.history.push(player.cards.indexOf(card));
-    if (moves.length === 4) {
-      const { player: winner } = getWinningMove(moves, trumpSuite, baseSuite),
-        { team } = winner,
-        { rivalTeam: rival } = team;
-
-      team.tricks++;
-      this.tcid = winner.id;
+    card.isMoved = true;
+    activeCards.push(move);
+    if (activeCards.length === 4) {
+      const winner = getWinningMove(activeCards, trumpSuite, baseSuite).player;
+      winner.team.tricks++;
+      this.tcid = winner.name;
       this.turn = winner.index;
       this.baseSuite = null;
-      moves.length = 0;
-      // console.log('-----------------');
-      // this.emit('move', move);
-
-      if (winner.team.tricks === 7) {
-        this.end();
-        // let hands = 1;
-        // if (rival.tricks === 0) hands++;
-        // if (this.trumpCaller.isMemberOf(rival)) hands++;
-        // team.hands += hands;
-
-        // team.tricks = 0;
-        // rival.tricks = 0;
-      }
+      activeCards.length = 0;
+      if (winner.team.tricks === 7) this.end();
     } else {
-      if (moves.length === 1) this.baseSuite = moves[0].card.type;
+      if (activeCards.length === 1) this.baseSuite = activeCards[0].card.type;
       this.turn = turn === 3 ? 0 : turn + 1;
     }
     this.emit('move', move);
