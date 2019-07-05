@@ -1,12 +1,11 @@
 <script>
 import Intro from './Intro.svelte';
+import Game from './Game.svelte';
 import { isPlaying } from './store';
-
-const play = () => isPlaying.set(true);
 </script>
 
 {#if $isPlaying}
-  <h1>Game</h1>
+  <Game />
 {:else}
-  <intro on:start={play} />
+  <Intro on:start={() => isPlaying.set(true)} />
 {/if}

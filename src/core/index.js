@@ -1,7 +1,8 @@
 import EE3 from 'eventemitter3';
-import { Team } from './player';
-import { getWinningMove, getCards } from './utils';
-import Bot from './bot';
+import * as R from 'ramda';
+import { Team, Player } from './player';
+import { getWinningMove, getCards } from './utils/';
+import wrapAsBot from './bot';
 
 /**
  * @typedef {import('./player').Player} Player
@@ -16,28 +17,33 @@ export default class Game extends EE3 {
    * @param {Player[]} options.players
    * @param {CardType} options.trumpSuite
    */
-  constructor({ players, trumpSuite }) {
+  constructor() {
     super();
 
-    const cards = getCards();
-    for (const p of players) {
-      p.game = this;
-      p.cards = cards.shift();
-      if (p.activated) p.activated(this);
-    }
-    const [a, b, c, d] = players;
+    const cards = getCards(),
+      players = R.range(0, 4).map((_, i) => {
+        const p = i ? wrapAsBot(new Player(`b-${i}`, this)) : new Player('me', this);
+        p.cards = cards.shift();
+        return p;
+      }),
+      [a, b, c, d] = players;
     this.teams = [new Team(a, c), new Team(b, d)];
-    this.players = [a, b, c, d];
+    this.players = players;
+    players.forEach(p => p.onActivate());
 
     this.tcid = players[0].id;
     /** @type {number} */ this.turn = 0;
-    this.trumpSuite = trumpSuite;
     /** @type {CardType} */ this.baseSuite = null;
+    /** @type {CardType} */ this.trumpSuite = null;
     /** @type {Move[]} */ this.moves = [];
   }
 
   get tricks() {
     return this.teams.map(t => t.tricks);
+  }
+
+  get me() {
+    return this.players[0];
   }
 
   get trumpCaller() {
@@ -58,37 +64,42 @@ export default class Game extends EE3 {
       } = this,
       move = { player, card };
 
+    console.log(`[${player.id}]`, card);
+    if (!trumpSuite) throw new Error('vaisa!');
     if (!player.mustMove) throw new Error('wait. that\'s illegal.');
     if (moves.length === 0 && this.totalTricks === 0
       && card.type !== trumpSuite) throw new Error('hokm o bia koskesh');
 
     moves.push(move);
+    player.history.push(player.cards.indexOf(card));
     if (moves.length === 4) {
       const { player: winner } = getWinningMove(moves, trumpSuite, baseSuite),
         { team } = winner,
         { rivalTeam: rival } = team;
 
       team.tricks++;
-      // this.tcid = winner.id;
+      this.tcid = winner.id;
       this.turn = winner.index;
-      this.emit('move', { ...move, winner, winnerTeam: team });
       this.baseSuite = null;
       moves.length = 0;
+      // console.log('-----------------');
+      // this.emit('move', move);
 
       if (winner.team.tricks === 7) {
-        let hands = 1;
-        if (rival.tricks === 0) hands++;
-        if (this.trumpCaller.isMemberOf(rival)) hands++;
-        team.hands += hands;
+        this.end();
+        // let hands = 1;
+        // if (rival.tricks === 0) hands++;
+        // if (this.trumpCaller.isMemberOf(rival)) hands++;
+        // team.hands += hands;
 
-        team.tricks = 0;
-        rival.tricks = 0;
+        // team.tricks = 0;
+        // rival.tricks = 0;
       }
     } else {
       if (moves.length === 1) this.baseSuite = moves[0].card.type;
       this.turn = turn === 3 ? 0 : turn + 1;
-      this.emit('move', move);
     }
+    this.emit('move', move);
   }
 
   end() {
@@ -96,13 +107,5 @@ export default class Game extends EE3 {
       winner = a.tricks > b.tricks ? a : b,
       loser = winner.rivalTeam;
     this.emit('end', { winner, loser });
-  }
-
-  /** @param {Player} player */
-  static singlePlayer(player, trumpSuite) {
-    return new Game({
-      trumpSuite,
-      players: [player, ...Array.from({ length: 3 }, () => new Bot())]
-    });
   }
 }

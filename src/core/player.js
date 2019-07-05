@@ -1,21 +1,39 @@
-/** @return {string} */
-const generateId = () => Math.floor(Math.random() * 1e4).toString().padEnd(4, 0);
+import { Card } from './card';
 
 export class Player {
-  constructor() {
-    this.id = generateId();
-    /** @type {import('./game').default} */ this.game = null;
+  /**
+   * @param {string} name
+   * @param {import('.').default} game
+   */
+  constructor(name, game, onActivate = () => {}) {
+    this.id = name;
+    this.game = game;
     /** @type {Team} */ this.team = null;
-    /** @type {import('./game').Card[]} */ this.cards = null;
-    this.activated = null;
+    /** @type {import('./card').Card[]} */ this.cards = [];
+    // this.history = [];
+    this.onActivate = onActivate;
   }
 
   move(card) {
     this.game.handleMove(this, card);
   }
 
+  get availableCards() {
+    return this.cards.filter(card => !card.isMoved);
+    return this.cards.filter((_, i) => !this.history.includes(i));
+  }
+
   get isTrumpCaller() {
     return this.game.tcid === this.id;
+  }
+
+  /** @param {Team} team */
+  isMemberOf(team) {
+    return team.members.includes(this);
+  }
+
+  useCards(arr) {
+    this.cards = arr.map(({ number, type }) => new Card(number, type, this));
   }
 
   get index() {
@@ -24,11 +42,6 @@ export class Player {
 
   get mustMove() {
     return this.game.turn === this.index;
-  }
-
-  /** @param {Team} team */
-  isMemberOf(team) {
-    return team.members.includes(this);
   }
 }
 
@@ -43,10 +56,6 @@ export class Team {
     this.members = [pa, pb];
     this.tricks = 0;
     this.hands = 0;
-  }
-
-  get game() {
-    return this.members[0].game;
   }
 
   get rivalTeam() {

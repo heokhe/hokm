@@ -1,0 +1,16 @@
+.card {
+  transition: .085s ease-out;
+  @apply rounded text-lg font-bold cursor-pointer text-white inline-flex items-center mr-2 mb-2 py-1 px-3 text-gray-800 bg-gray-200 shadow-inner;
+}
+.card.red {
+  @apply text-red-600
+}
+.card:hover {
+  @apply text-white bg-gray-800;
+}
+.card.red:hover {
+  @apply bg-red-600;
+}
+.card > span {
+  @apply inline-block ml-2;
+}

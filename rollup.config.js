@@ -27,14 +27,17 @@ export default {
     postcss({
       plugins: [
         postcssImport,
-        tailwind(),
-        autoprefixer,
-        production && purgeCss({
-          content: ['./src/**/*.html', './src/**/*.svelte'],
-          defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || []
-        })
+        tailwind('tailwind.config.js'),
+        ...production ? [
+          autoprefixer,
+          purgeCss({
+            content: ['./src/**/*.svelte', './public/index.html'],
+            defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || []
+          })
+        ] : []
       ].filter(Boolean),
-      extract: 'public/bundle.css'
+      extract: 'public/bundle.css',
+      minimize: production
     }),
     resolve({ browser: true }),
     commonjs(),
