@@ -10,7 +10,7 @@ export class Card {
   /**
    * @param {number} number
    * @param {CardType} type
-   * @param {import(".").Player} [owner]
+   * @param {import('./player').Player} [owner]
    */
   constructor(number, type, owner) {
     this.number = number;

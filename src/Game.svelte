@@ -20,7 +20,7 @@ $game.on('move', () => {
   tricks = $game.tricks;
 })
 $game.on('end', ({ winner: { members: [a, b] } }) => {
-  alert(`the game has ended. ${a.id} and ${b.id} won!`);
+  alert(`the game has ended. ${a.name} and ${b.name} won!`);
   $isPlaying = false
 })
 </script>
