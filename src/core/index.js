@@ -1,13 +1,8 @@
 import EE3 from 'eventemitter3';
 import * as R from 'ramda';
 import { Team, Player } from './player';
-import { getWinningMove, getCards } from './utils/';
+import { getWinningCard, getCards } from './utils';
 import wrapAsBot from './bot';
-
-/**
- * @typedef {import('./player').Player} Player
- * @typedef {{ player: Player, card: import('./card').Card }} Move
- */
 
 export default class Game extends EE3 {
   /**
@@ -33,7 +28,7 @@ export default class Game extends EE3 {
     /** @type {number} */ this.turn = 0;
     /** @type {import('./card').CardType} */ this.baseSuite = null;
     /** @type {import('./card').CardType} */ this.trumpSuite = null;
-    /** @type {Move[]} */ this.activeCards = [];
+    /** @type {import('./card').Card[]} */ this.activeCards = [];
   }
 
   get tricks() {
@@ -58,20 +53,20 @@ export default class Game extends EE3 {
    */
   handleMove(player, card) {
     const {
-        activeCards, trumpSuite, baseSuite, turn
-      } = this,
-      move = { player, card };
+      activeCards, trumpSuite: trump, baseSuite: base, turn
+    } = this;
 
+    // eslint-disable-next-line no-console
     console.log(`[${player.name}]`, card);
     if (card.owner !== player || card.isMoved) throw new Error('shit');
-    if (!trumpSuite) throw new Error('vaisa!');
+    if (!trump) throw new Error('vaisa!');
     if (!player.mustMove) throw new Error('wait. that\'s illegal.');
-    if (activeCards.length === 0 && this.totalTricks === 0 && card.type !== trumpSuite) throw new Error('hokm o bia koskesh');
+    if (activeCards.length === 0 && this.totalTricks === 0 && card.type !== trump) throw new Error('hokm o bia koskesh');
 
     card.isMoved = true;
-    activeCards.push(move);
+    activeCards.push(card);
     if (activeCards.length === 4) {
-      const winner = getWinningMove(activeCards, trumpSuite, baseSuite).player;
+      const winner = getWinningCard(activeCards, trump, base).owner;
       winner.team.tricks++;
       this.tcid = winner.name;
       this.turn = winner.index;
@@ -79,10 +74,10 @@ export default class Game extends EE3 {
       activeCards.length = 0;
       if (winner.team.tricks === 7) this.end();
     } else {
-      if (activeCards.length === 1) this.baseSuite = activeCards[0].card.type;
+      if (activeCards.length === 1) this.baseSuite = activeCards[0].type;
       this.turn = turn === 3 ? 0 : turn + 1;
     }
-    this.emit('move', move);
+    this.emit('move', { player, card });
   }
 
   end() {

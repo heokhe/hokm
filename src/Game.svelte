@@ -6,16 +6,16 @@ import { onMount } from 'svelte';
 import { CARD_TYPES } from './core/card';
 import { game, isPlaying } from './store';
 $: mustSelectTrumpSuite = !$game.trumpSuite;
-let moves, base, cards = [], tricks;
+let activeCards, base, cards = [], tricks;
 onMount(() => {
-  moves = [];
+  activeCards = [];
   base = null;
   cards = $game.me.availableCards;
   tricks = [0,0];
 })
 $game.on('move', () => {
   cards = $game.me.availableCards;
-  moves = $game.activeCards;
+  activeCards = $game.activeCards;
   base = $game.baseSuite;
   tricks = $game.tricks;
 })
@@ -40,9 +40,9 @@ $game.on('end', ({ winner: { members: [a, b] } }) => {
         {/each}
       </div>
     {:else}
-      {#each moves as { player, card: { number, type } }}
+      {#each activeCards as { number, type, owner: { name } } }
         <div>
-          player: {player.id}
+          player: {name}
           <Card {number} {type} />
         </div>
       {/each}

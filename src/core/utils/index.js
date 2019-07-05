@@ -6,17 +6,17 @@ import { CARD_TYPES } from '../card';
 export { default as decide } from './decision';
 
 /**
- * @param {import('..').Move[]} moves
+ * @param {import('../card').Card[]} cards
  * @param {import('../card').CardType} trumpSuite
  * @param {import('../card').CardType} baseSuite
  */
-export function getWinningMove(moves, trumpSuite, baseSuite) {
+export function getWinningCard(cards, trumpSuite, baseSuite) {
   const tn = t => (t === trumpSuite ? 2 : t === baseSuite ? 1 : 0);
   return R.head(R.sort((a, b) => {
-    const { card: { type: at, number: an } } = a,
-      { card: { type: bt, number: bn } } = b;
+    const { type: at, number: an } = a,
+      { type: bt, number: bn } = b;
     return tn(bt) - tn(at) || bn - an;
-  }, moves));
+  }, cards));
 }
 
 export function getCards() {
