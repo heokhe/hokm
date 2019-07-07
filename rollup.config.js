@@ -29,7 +29,7 @@ export default {
       plugins: [
         postcssImport,
         tailwind('tailwind.config.js'),
-        purgeCss({
+        production && purgeCss({
           content: ['./src/**/*.svelte', './public/index.html'],
           defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || []
         }),
