@@ -29,7 +29,7 @@ $game.on('end', ({ winner: { members: [a, b] } }) => {
   {#if !mustSelectTrumpSuite}
     <GameHeader {tricks} baseSuite={base} trumpSuite={$game.trumpSuite} />
   {/if}
-  <main class="h-full {mustSelectTrumpSuite ? 'flex items-center justify-center flex-col' : ''}">
+  <main class="game-board {mustSelectTrumpSuite ? 'centered' : ''}">
     {#if mustSelectTrumpSuite}
       <h1 class="text-2xl font-medium">Select a trump suite</h1>
       <div>
@@ -48,11 +48,11 @@ $game.on('end', ({ winner: { members: [a, b] } }) => {
       {/each}
     {/if}
   </main>
-  <div class="cards text-center block flex-shrink-0 pl-2 pt-2 border-grey-100 border-t">
+  <section class="cards">
     {#each cards as card, i}
       {#if !mustSelectTrumpSuite || i < 5}
         <Card number={card.number} type={card.type} on:click={() => $game.me.move(card)} />
       {/if}
     {/each}
-  </div>
+  </section>
 </div>

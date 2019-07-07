@@ -1,0 +1,20 @@
+section.cards
+  @apply w-screen flex flex-shrink-0 border border-gray-100 overflow-x-auto justify-start
+
+.card
+  transition: .085s ease-out
+  width: 60px
+  height: 95px
+  @apply relative flex items-center justify-center text-gray-800 bg-white flex-shrink-0 font-bold text-2xl cursor-pointer
+  &.red
+    @apply text-red-600
+  > svg
+    @apply absolute
+    &:first-of-type
+      left: .5rem
+      top: .5rem
+    &:last-of-type
+      right: .5rem
+      bottom: .5rem
+  > span
+    @apply inline-block ml-2

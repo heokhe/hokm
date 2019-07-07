@@ -6,6 +6,7 @@ $: isRed = type === 'D' || type === 'K';
 </script>
 
 <div class="card {isRed ? 'red' : ''}" on:click>
-  <CardIcon size='1.2em' {type} />
+  <CardIcon size='.75em' {type} />
   <span>{stringify(number)}</span>
+  <CardIcon size='.75em' {type} />
 </div>

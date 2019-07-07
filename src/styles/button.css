@@ -1,8 +1,0 @@
-button {
-  transition: .085s ease-out;
-  @apply px-4 py-2 rounded shadow text-lg font-medium uppercase m-2 mt-4 bg-indigo-600 text-white;
-}
-
-button:hover, button:focus {
-  @apply bg-indigo-700 shadow-lg;
-}
