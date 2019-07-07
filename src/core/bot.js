@@ -1,4 +1,4 @@
-import { decide } from './utils/';
+import decide from './utils/decision';
 
 /** @param {import('./player').Player} me */
 export default function wrapAsBot(me) {

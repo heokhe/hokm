@@ -3,8 +3,6 @@ import chunk from 'lodash/chunk';
 import shuffle from 'lodash/shuffle';
 import { CARD_TYPES } from '../card';
 
-export { default as decide } from './decision';
-
 /**
  * @param {import('../card').Card[]} cards
  * @param {import('../card').CardType} trumpSuite
@@ -31,3 +29,11 @@ export function getCards() {
 export const stringifyNumber = n => (n === 14 ? 'A' : n === 13 ? 'K' : n === 12 ? 'Q' : n === 11 ? 'J' : String(n));
 
 export const wait = ms => new Promise(r => { setTimeout(r, ms); });
+
+/**
+ * Sorts a list of cards according to their numeric value.
+ * @template T
+ * @param {T[]} arr
+ * @returns {T[]}
+ */
+export const sortByNumber = arr => R.sort(R.prop('number'), arr);

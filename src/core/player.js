@@ -35,6 +35,11 @@ export class Player {
     this.cards = arr.map(({ number, type }) => new Card(number, type, this));
   }
 
+  /** @param {Player} player */
+  isTeammateOf(player) {
+    return this.team === player.team;
+  }
+
   get index() {
     return this.game.players.indexOf(this);
   }
