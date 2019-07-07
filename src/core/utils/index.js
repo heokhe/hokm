@@ -36,4 +36,4 @@ export const wait = ms => new Promise(r => { setTimeout(r, ms); });
  * @param {T[]} arr
  * @returns {T[]}
  */
-export const sortByNumber = arr => R.sort(R.prop('number'), arr);
+export const sortByNumber = arr => R.sortBy(R.prop('number'), arr);
