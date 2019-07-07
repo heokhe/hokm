@@ -1,20 +1,20 @@
 section.cards
-  @apply w-screen flex flex-shrink-0 border border-gray-100 overflow-x-auto justify-start
+  @apply w-screen flex flex-shrink-0 overflow-x-auto justify-start p-3
 
 .card
   transition: .085s ease-out
-  width: 60px
-  height: 95px
-  @apply relative flex items-center justify-center text-gray-800 bg-white flex-shrink-0 font-bold text-2xl cursor-pointer
+  font-family: product sans
+  @apply relative flex items-center justify-center flex-shrink-0 font-bold text-xl cursor-pointer bg-gray-700 text-white rounded-full
+  padding: calc(.325rem + 3px) 1.1rem .325rem
+  & + &
+    @apply ml-3
+  &:hover 
+    @apply bg-gray-800 text-gray-200 shadow
   &.red
-    @apply text-red-600
+    @apply bg-red-700
+    &:hover
+      @apply bg-red-800 text-red-200
   > svg
-    @apply absolute
-    &:first-of-type
-      left: .5rem
-      top: .5rem
-    &:last-of-type
-      right: .5rem
-      bottom: .5rem
+    @apply mr-2 -mt-1
   > span
-    @apply inline-block ml-2
+    @apply inline-block
