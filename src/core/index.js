@@ -1,7 +1,7 @@
 import EE3 from 'eventemitter3';
 import * as R from 'ramda';
 import { Team, Player } from './player';
-import { getWinningCard, getCards } from './utils';
+import { getWinningCard, getCards, wait } from './utils';
 import wrapAsBot from './bot';
 
 export default class Game extends EE3 {
@@ -43,15 +43,11 @@ export default class Game extends EE3 {
     return this.players.find(p => p.name === this.tcid);
   }
 
-  teamOf(player) {
-    return this.teams.find(t => t.includes(player));
-  }
-
   /**
    * @param {Player} player
    * @param {import('./card').Card} card
    */
-  handleMove(player, card) {
+  async handleMove(player, card) {
     const {
       activeCards: actives, trumpSuite: trump, baseSuite: base, turn
     } = this;
@@ -68,6 +64,7 @@ export default class Game extends EE3 {
     console.log(`[${player.name}]`, card);
 
     card.isMoved = true;
+    if (card.owner !== this.me) await wait(1000);
     actives.push(card);
     if (actives.length < 4) {
       if (actives.length === 1) this.baseSuite = actives[0].type;
