@@ -4,8 +4,12 @@ section.cards
 .card
   transition: .085s ease-out
   font-family: product sans
-  @apply relative flex items-center justify-center flex-shrink-0 font-bold text-xl cursor-pointer bg-gray-700 text-white rounded-full
-  padding: calc(.325rem + 3px) 1.1rem .325rem
+  @apply relative inline-flex items-center justify-center flex-shrink-0 font-bold text-xl cursor-pointer bg-gray-700 text-white rounded-full h-10
+  padding: 3px 1.1rem 0
+  &.suite-only
+    @apply p-0 w-10
+  &:not(.suite-only) > svg 
+    @apply mr-2 -mt-1
   & + &
     @apply ml-3
   &:hover 
@@ -14,7 +18,5 @@ section.cards
     @apply bg-red-700
     &:hover
       @apply bg-red-800 text-red-200
-  > svg
-    @apply mr-2 -mt-1
   > span
     @apply inline-block

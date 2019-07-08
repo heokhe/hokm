@@ -34,9 +34,7 @@ $game.on('end', ({ winner: { members: [a, b] } }) => {
       <h1 class="text-2xl font-medium">Select a trump suite</h1>
       <div>
         {#each CARD_TYPES as type}
-          <button on:click={() => $game.trumpSuite = type}>
-            <CardIcon {type} size="1em" />
-          </button>
+          <Card {type} on:click={() => $game.trumpSuite = type} />
         {/each}
       </div>
     {:else}
