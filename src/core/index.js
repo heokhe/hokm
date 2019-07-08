@@ -53,11 +53,8 @@ export default class Game extends EE3 {
    */
   handleMove(player, card) {
     const {
-      activeCards, trumpSuite: trump, baseSuite: base, turn
+      activeCards: actives, trumpSuite: trump, baseSuite: base, turn
     } = this;
-
-    // eslint-disable-next-line no-console
-    console.log(`[${player.name}]`, card);
 
     if (card.type !== base && card.owner.availableCards.some(c => c.type === base)) {
       throw new Error('hokm bia');
@@ -65,23 +62,29 @@ export default class Game extends EE3 {
     if (card.owner !== player || card.isMoved) throw new Error('shit');
     if (!trump) throw new Error('vaisa!');
     if (!player.mustMove) throw new Error('wait. that\'s illegal.');
-    if (activeCards.length === 0 && this.totalTricks === 0 && card.type !== trump) throw new Error('hokm o bia koskesh');
+    if (actives.length === 0 && this.totalTricks === 0 && card.type !== trump) throw new Error('hokm o bia koskesh');
+
+    // eslint-disable-next-line no-console
+    console.log(`[${player.name}]`, card);
 
     card.isMoved = true;
-    activeCards.push(card);
-    if (activeCards.length === 4) {
-      const winner = getWinningCard(activeCards, trump, base).owner;
-      winner.team.tricks++;
-      this.tcid = winner.name;
-      this.turn = winner.index;
-      this.baseSuite = null;
-      activeCards.length = 0;
-      if (winner.team.tricks === 7) this.end();
-    } else {
-      if (activeCards.length === 1) this.baseSuite = activeCards[0].type;
+    actives.push(card);
+    if (actives.length < 4) {
+      if (actives.length === 1) this.baseSuite = actives[0].type;
       this.turn = turn === 3 ? 0 : turn + 1;
-    }
+    } else this.resetMoves();
+
     this.emit('move', { player, card });
+  }
+
+  resetMoves() {
+    const { activeCards: actives } = this,
+      { owner: winner } = getWinningCard(actives, this.trumpSuite, this.baseSuite);
+    winner.team.tricks++;
+    this.turn = winner.index;
+    this.baseSuite = null;
+    actives.length = 0;
+    if (winner.team.tricks === 7) this.end();
   }
 
   end() {
