@@ -41,7 +41,11 @@ export default {
     resolve({ browser: true }),
     commonjs(),
     !production && livereload('public'),
-    production && buble(),
+    production && buble({
+      transforms: {
+        asyncAwait: false
+      }
+    }),
     production && terser()
   ],
   watch: {
