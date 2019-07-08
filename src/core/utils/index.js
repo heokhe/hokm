@@ -31,7 +31,7 @@ export const stringifyNumber = n => (n === 14 ? 'A' : n === 13 ? 'K' : n === 12 
 export const wait = ms => new Promise(r => { setTimeout(r, ms); });
 
 /**
- * Sorts a list of cards according to their numeric value.
+ * Ascendingly sorts a list of cards according to their numeric value.
  * @template T
  * @param {T[]} arr
  * @returns {T[]}
