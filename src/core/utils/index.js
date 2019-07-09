@@ -28,7 +28,7 @@ export function getCards() {
 
 export const stringifyNumber = n => (n === 14 ? 'A' : n === 13 ? 'K' : n === 12 ? 'Q' : n === 11 ? 'J' : String(n));
 
-export const wait = ms => new Promise(r => { setTimeout(r, ms); });
+export const wait = ms => new Promise(r => setTimeout(r, ms));
 
 /**
  * Ascendingly sorts a list of cards according to their numeric value.
