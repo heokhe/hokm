@@ -1,7 +1,9 @@
-.game-board
-  @apply flex justify-between items-center h-full w-full flex-col
-  &.centered
-    @apply items-center justify-center
+main.game-board
+  @apply flex justify-center items-center h-full flex-col mx-auto my-6 max-w-full relative
 
-.player-row 
-  @apply w-full flex items-center justify-around p-4
+.move
+  @apply flex items-center justify-center absolute
+  > .avatar
+    @apply flex items-center justify-center h-12 w-12 rounded-full bg-gray-100
+    > svg > path
+      @apply fill-blue-gray-600
