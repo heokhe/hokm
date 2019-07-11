@@ -1,21 +1,18 @@
 import EE3 from 'eventemitter3';
 import * as R from 'ramda';
 import { Team, Player } from './player';
-import { getWinningCard, getCards, wait } from './utils';
-import wrapAsBot from './bot';
+import { getWinningCard, wait } from './utils';
+import { Bot } from './bot';
+import { distribute } from './card';
 
 export default class Game extends EE3 {
-  /**
-   * @param {Object} options
-   * @param {Player[]} options.players
-   * @param {CardType} options.trumpSuite
-   */
   constructor() {
     super();
 
-    const cards = getCards(),
+    const cards = distribute(),
       players = R.range(0, 4).map((_, i) => {
-        const p = i ? wrapAsBot(new Player(`b-${i}`, this)) : new Player('me', this);
+        /** @type {Player} */
+        const p = i ? new Bot(`b-${i}`, this) : new Player('me', this);
         p.useCards(cards.shift());
         return p;
       }),
