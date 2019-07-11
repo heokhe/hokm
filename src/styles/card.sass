@@ -1,22 +1,27 @@
 section.cards
-  @apply w-screen flex flex-shrink-0 overflow-x-auto justify-start p-3
+  @apply w-screen flex flex-shrink-0 overflow-x-auto justify-start py-3 pl-3
+  > .card
+    @apply mr-3
 
 .card
   transition: .085s ease-out
   font-family: product sans
-  @apply relative inline-flex items-center justify-center flex-shrink-0 font-bold text-xl cursor-pointer bg-gray-700 text-white rounded-full h-10
   padding: 3px 1.1rem 0
-  &.suite-only
-    @apply p-0 w-10
-  &:not(.suite-only) > svg 
-    @apply mr-2 -mt-1
-  & + &
-    @apply ml-3
-  &:hover 
-    @apply bg-gray-800 text-gray-200 shadow
-  &.red
-    @apply bg-red-700
+  @apply relative inline-flex items-center justify-center flex-shrink-0 font-bold text-xl bg-blue-gray-800 text-white rounded-full h-10
+  &.clickable
+    @apply cursor-pointer
     &:hover
-      @apply bg-red-800 text-red-200
+      @apply bg-blue-gray-900 text-blue-gray-200 shadow-md
+      &.red
+        @apply bg-red-900 text-red-100
+  &.suite-only
+    @apply p-0 w-10 mr-3
+  &:not(.suite-only)
+    @media only screen and (max-width: 768px)
+      @apply h-8 text-lg px-4
+    > svg
+      @apply mr-2 -mt-1
+  &.red
+    @apply bg-red-600
   > span
     @apply inline-block
