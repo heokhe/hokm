@@ -1,7 +1,4 @@
 import * as R from 'ramda';
-import chunk from 'lodash/chunk';
-import shuffle from 'lodash/shuffle';
-import { CARD_TYPES } from '../card';
 
 /**
  * @param {import('../card').Card[]} cards
@@ -15,15 +12,6 @@ export function getWinningCard(cards, trumpSuite, baseSuite) {
       { type: bt, number: bn } = b;
     return tn(bt) - tn(at) || bn - an;
   }, cards));
-}
-
-export function getCards() {
-  const numbers = R.range(2, 15),
-    types = R.range(0, 4).map(n => CARD_TYPES[n]);
-  return chunk(shuffle(R.xprod(numbers, types)).map(([n, t]) => ({
-    number: n,
-    type: t
-  })), 13);
 }
 
 export const stringifyNumber = n => (n === 14 ? 'A' : n === 13 ? 'K' : n === 12 ? 'Q' : n === 11 ? 'J' : String(n));
