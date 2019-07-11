@@ -36,6 +36,6 @@
     "serve": "sirv public -s -p 1352",
     "serve:dev": "npm run serve -- -D",
     "deploy": "surge public https://hokm.surge.sh",
-    "lint": "eslint src --fix"
+    "lint": "eslint src --fix '*.js'"
   }
 }
