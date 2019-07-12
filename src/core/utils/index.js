@@ -1,18 +1,6 @@
 import * as R from 'ramda';
 
-/**
- * @param {import('../card').Card[]} cards
- * @param {import('../card').CardType} trumpSuite
- * @param {import('../card').CardType} baseSuite
- */
-export function getWinningCard(cards, trumpSuite, baseSuite) {
-  const tn = t => (t === trumpSuite ? 2 : t === baseSuite ? 1 : 0);
-  return R.head(R.sort((a, b) => {
-    const { type: at, number: an } = a,
-      { type: bt, number: bn } = b;
-    return tn(bt) - tn(at) || bn - an;
-  }, cards));
-}
+export { default as getWinningCard } from './winningCard';
 
 export const stringifyNumber = n => (n === 14 ? 'A' : n === 13 ? 'K' : n === 12 ? 'Q' : n === 11 ? 'J' : String(n));
 
@@ -25,3 +13,29 @@ export const wait = ms => new Promise(r => setTimeout(r, ms));
  * @returns {T[]}
  */
 export const sortByNumber = arr => R.sortBy(R.prop('number'), arr);
+
+/**
+ * @template T
+ * @param {T[]} arr
+ * @returns {T[]}
+ */
+export function shuffle(arr) {
+  if (arr.length <= 1) return [...arr];
+  const index = Math.floor(Math.random() * arr.length);
+  return shuffle(R.remove(index, 1, arr)).concat(arr[index]);
+}
+
+/**
+ * @template T
+ * @param {T[]} arr
+ * @param {number} length
+ * @returns {T[]}
+ * @example toChunks([1, 2, 3, 4, 5, 6, 7], 2) // [[1, 2], [3, 4], [5, 6], [7]]
+ */
+export function toChunks(arr, length) {
+  const chunks = [];
+  for (let i = 0; i < (arr.length / length); i++) {
+    chunks.push(arr.slice(i * length, i * length + length));
+  }
+  return chunks;
+}

@@ -1,6 +1,5 @@
 import * as R from 'ramda';
-import chunk from 'lodash/chunk';
-import shuffle from 'lodash/shuffle';
+import { shuffle, toChunks } from './utils';
 
 /** @typedef {'G'|'K'|'P'|'D'} CardType */
 /** @type {CardType[]} */ export const CARD_TYPES = ['D', 'G', 'K', 'P'];
@@ -26,6 +25,9 @@ export class Card {
 export function distribute() {
   const numbers = R.range(2, 15),
     types = R.range(0, 4).map(n => CARD_TYPES[n]);
-  return chunk(shuffle(R.xprod(numbers, types))
-    .map(([number, type]) => ({ number, type })), 13);
+  return toChunks(
+    shuffle(
+      R.xprod(numbers, types).map(([number, type]) => ({ number, type }))
+    ), 13
+  );
 }
