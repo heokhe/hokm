@@ -9,6 +9,7 @@ import svelte from 'rollup-plugin-svelte';
 import { terser } from 'rollup-plugin-terser';
 import tailwind from 'tailwindcss';
 import buble from 'rollup-plugin-buble';
+import visualize from 'rollup-plugin-visualizer';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -46,7 +47,8 @@ export default {
         asyncAwait: false
       }
     }),
-    production && terser()
+    production && terser(),
+    production && visualize()
   ],
   watch: {
     clearScreen: false

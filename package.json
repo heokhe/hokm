@@ -1,6 +1,7 @@
 {
-  "name": "svelte-app",
+  "name": "hokm",
   "version": "1.0.0",
+  "preview": true,
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "^1.2.0",
     "@hkh12/eslint-config": "^1.0.1",
@@ -19,6 +20,7 @@
     "rollup-plugin-postcss": "^2.0.3",
     "rollup-plugin-svelte": "^5.0.3",
     "rollup-plugin-terser": "^4.0.4",
+    "rollup-plugin-visualizer": "^2.4.4",
     "sirv-cli": "^0.4.4",
     "surge": "^0.21.3",
     "tailwindcss": "^1.0.4"
