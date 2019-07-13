@@ -1,21 +1,43 @@
+import EE3 from 'eventemitter3';
 import { Card } from './card';
 
-export class Player {
+export class Player extends EE3 {
   /**
    * @param {string} name
    * @param {import('.').default} game
+   * @param {Card[]} cards
    */
-  constructor(name, game, onActivate = () => {}) {
+  constructor(name, game, cards) {
+    super();
     this.name = name;
     this.game = game;
+    this.cards = cards.map(c => {
+      c.owner = this;
+      return c;
+    });
     /** @type {Team} */ this.team = null;
-    /** @type {import('./card').Card[]} */ this.cards = [];
-    // this.history = [];
-    this.onActivate = onActivate;
   }
 
+  /** @param {Card} card */
   move(card) {
-    this.game.handleMove(this, card);
+    const { baseSuite: base } = this.game;
+    if (base && card.type !== base && this.availableCards.some(c => c.type === base)) {
+      throw new Error(`You already have cards of type ${base}!`);
+    }
+    this.emit('move', card);
+  }
+
+  /** @returns {Promise<import('./card').Card>} */
+  async next() {
+    return new Promise(r => {
+      this.emit('must-move');
+      this.on('move', card => {
+        if (!(card instanceof Card)) {
+          throw new TypeError(`expected Card, got ${card}`);
+        }
+        r(card);
+      });
+    });
   }
 
   get availableCards() {
@@ -29,10 +51,6 @@ export class Player {
   /** @param {Team} team */
   isMemberOf(team) {
     return team.members.includes(this);
-  }
-
-  useCards(arr) {
-    this.cards = arr.map(({ number, type }) => new Card(number, type, this));
   }
 
   /** @param {Player} player */

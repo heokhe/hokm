@@ -7,14 +7,15 @@ import Move from './components/Move.svelte';
 import GameHeader from './components/GameHeader.svelte';
 import Board from './components/Board.svelte';
 
-$: mustSelectTrumpSuite = !$game.trumpSuite;
-let activeCards, base, cards = [], tricks;
+let activeCards = [], base = null, cards = [], tricks = [0, 0], mustSelectTrumpSuite = true;
+
+function init(type) {
+  $game.init(type);
+  mustSelectTrumpSuite = false;
+}
 
 onMount(() => {
-  activeCards = [];
-  base = null;
   cards = $game.me.availableCards;
-  tricks = [0, 0];
 })
 
 $game.on('move', () => {
@@ -22,6 +23,12 @@ $game.on('move', () => {
   activeCards = $game.activeCards;
   base = $game.baseSuite;
   tricks = $game.tricks;
+})
+
+$game.on('reset', () => {
+  tricks = $game.tricks;
+  activeCards = [];
+  base = null;
 })
 
 $game.on('end', ({ winner: { members: [a, b] } }) => {
@@ -39,7 +46,7 @@ $game.on('end', ({ winner: { members: [a, b] } }) => {
       <h1 class="text-3xl tracking-wide font-light text-gray-800 text-center">Select a trump suite</h1>
       <div class="mt-3">
         {#each CARD_TYPES as type}
-          <Card {type} clickable on:click={() => $game.trumpSuite = type} />
+          <Card {type} clickable on:click={() => init(type)} />
         {/each}
       </div>
     {:else}
@@ -51,7 +58,7 @@ $game.on('end', ({ winner: { members: [a, b] } }) => {
   <section class="cards">
     {#each cards as card, i}
       {#if !mustSelectTrumpSuite || 5 > i}
-        <Card number={card.number} type={card.type} on:click={() => $game.me.move(card)} clickable />
+        <Card number={card.number} type={card.type} on:click={() => $game.me.move(card)} clickable={!mustSelectTrumpSuite} />
       {/if}
     {/each}
   </section>
