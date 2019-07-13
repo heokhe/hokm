@@ -29,7 +29,7 @@ export function shuffle(arr) {
  * @template T
  * @param {T[]} arr
  * @param {number} length
- * @returns {T[]}
+ * @returns {T[][]}
  * @example toChunks([1, 2, 3, 4, 5, 6, 7], 2) // [[1, 2], [3, 4], [5, 6], [7]]
  */
 export function toChunks(arr, length) {
