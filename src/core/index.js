@@ -1,17 +1,16 @@
 /* eslint-disable no-await-in-loop */
-import EE3 from 'eventemitter3';
-import * as R from 'ramda';
-import { Team, Player } from './player';
-import { getWinningCard, wait } from './utils';
 import wrapAsBot from './bot';
+import EE from './ee';
 import { distribute } from './card';
+import { getWinningCard, wait } from './utils';
+import { Player, Team } from './player';
 
-export default class Game extends EE3 {
+export default class Game extends EE {
   constructor() {
     super();
-    const cards = distribute(),
-      players = R.range(0, 4).map(i => {
-        let p = new Player(i ? `bot${i}` : 'me', this, cards.shift());
+    const allCards = distribute(),
+      players = allCards.map((cards, i) => {
+        let p = new Player(i ? `bot${i}` : 'me', this, cards);
         if (i) p = wrapAsBot(p);
         return p;
       }),

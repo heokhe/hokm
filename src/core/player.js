@@ -1,7 +1,7 @@
-import EE3 from 'eventemitter3';
 import { Card } from './card';
+import EE from './ee';
 
-export class Player extends EE3 {
+export class Player extends EE {
   /**
    * @param {string} name
    * @param {import('.').default} game
