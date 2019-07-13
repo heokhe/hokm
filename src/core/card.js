@@ -27,7 +27,7 @@ export function distribute() {
     types = R.range(0, 4).map(n => CARD_TYPES[n]);
   return toChunks(
     shuffle(
-      R.xprod(numbers, types).map(([number, type]) => ({ number, type }))
+      R.xprod(numbers, types).map(([number, type]) => new Card(number, type))
     ), 13
   );
 }
