@@ -1,7 +1,7 @@
 <script>
 import { onMount } from 'svelte';
 import { CARD_TYPES } from './core/card';
-import { game, isPlaying } from './store';
+import { game } from './store';
 import Card from './components/Card.svelte';
 import Move from './components/Move.svelte';
 import GameHeader from './components/GameHeader.svelte';
@@ -33,7 +33,7 @@ $game.on('reset', () => {
 
 $game.on('end', ({ winner: { members: [a, b] } }) => {
   alert(`the game has ended. ${a.name} and ${b.name} won!`);
-  $isPlaying = false
+  $game = null;
 })
 </script>
 

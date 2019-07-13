@@ -1,11 +1,12 @@
 <script>
 import Intro from './Intro.svelte';
-import Game from './Game.svelte';
-import { isPlaying } from './store';
+import GameComponent from './Game.svelte';
+import { game } from './store';
+import Game from './core';
 </script>
 
-{#if $isPlaying}
-  <Game />
+{#if !!$game}
+  <GameComponent />
 {:else}
-  <Intro on:start={() => isPlaying.set(true)} />
+  <Intro on:start={() => $game = new Game()} />
 {/if}
