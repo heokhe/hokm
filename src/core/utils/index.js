@@ -28,14 +28,15 @@ export function shuffle(arr) {
 /**
  * @template T
  * @param {T[]} arr
- * @param {number} length
+ * @param {number} len
  * @returns {T[][]}
  * @example toChunks([1, 2, 3, 4, 5, 6, 7], 2) // [[1, 2], [3, 4], [5, 6], [7]]
  */
-export function toChunks(arr, length) {
+export function toChunks(arr, len) {
   const chunks = [];
-  for (let i = 0; i < (arr.length / length); i++) {
-    chunks.push(arr.slice(i * length, i * length + length));
+  for (let i = 0; i < (arr.length / len); i++) {
+    const start = i * len;
+    chunks.push(arr.slice(start, start + len));
   }
   return chunks;
 }
