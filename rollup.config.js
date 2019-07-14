@@ -8,7 +8,7 @@ import postcss from 'rollup-plugin-postcss';
 import svelte from 'rollup-plugin-svelte';
 import { terser } from 'rollup-plugin-terser';
 import tailwind from 'tailwindcss';
-import buble from 'rollup-plugin-buble';
+import babel from 'rollup-plugin-babel';
 import visualize from 'rollup-plugin-visualizer';
 
 const production = !process.env.ROLLUP_WATCH;
@@ -41,14 +41,16 @@ export default {
     }),
     resolve({ browser: true }),
     commonjs(),
-    !production && livereload('public'),
-    production && buble({
-      transforms: {
-        asyncAwait: false
-      }
-    }),
-    production && terser(),
-    production && visualize()
+    ...production ? [
+      babel({
+        exclude: 'node_modules/**',
+        presets: ['@babel/preset-env']
+      }),
+      terser(),
+      visualize()
+    ] : [
+      livereload('public')
+    ]
   ],
   watch: {
     clearScreen: false
