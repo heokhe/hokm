@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import purgeCss from '@fullhuman/postcss-purgecss';
 import autoprefixer from 'autoprefixer';
 import postcssImport from 'postcss-import';
@@ -8,7 +9,7 @@ import postcss from 'rollup-plugin-postcss';
 import svelte from 'rollup-plugin-svelte';
 import { terser } from 'rollup-plugin-terser';
 import tailwind from 'tailwindcss';
-import babel from 'rollup-plugin-babel';
+import buble from 'rollup-plugin-buble';
 import visualize from 'rollup-plugin-visualizer';
 
 const production = !process.env.ROLLUP_WATCH;
@@ -42,15 +43,15 @@ export default {
     resolve({ browser: true }),
     commonjs(),
     ...production ? [
-      babel({
-        exclude: 'node_modules/**',
-        presets: ['@babel/preset-env']
+      buble({
+        transforms: {
+          asyncAwait: false,
+          dangerousForOf: true
+        }
       }),
       terser(),
       visualize()
-    ] : [
-      livereload('public')
-    ]
+    ] : [livereload('public')]
   ],
   watch: {
     clearScreen: false
