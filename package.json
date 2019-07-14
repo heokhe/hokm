@@ -22,7 +22,8 @@
     "rollup-plugin-visualizer": "^2.4.4",
     "sirv-cli": "^0.4.4",
     "surge": "^0.21.3",
-    "tailwindcss": "^1.0.4"
+    "tailwindcss": "^1.0.4",
+    "workbox-cli": "^4.3.1"
   },
   "dependencies": {
     "ramda": "^0.26.1",
@@ -34,7 +35,9 @@
     "start": "run-p serve:dev autobuild",
     "serve": "sirv public -s -p 1352",
     "serve:dev": "npm run serve -- -D",
-    "deploy": "surge public https://hokm.surge.sh",
+    "sw": "workbox generateSW",
+    "surge": "surge public https://hokm.surge.sh",
+    "deploy": "run-s lint build sw surge",
     "lint": "eslint src --fix '*.js'"
   }
 }
