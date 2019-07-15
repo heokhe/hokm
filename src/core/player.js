@@ -28,7 +28,7 @@ export class Player extends EE {
   }
 
   /** @returns {Promise<import('./card').Card>} */
-  async next() {
+  next() {
     return new Promise(r => {
       this.emit('must-move');
       this.on('move', card => {
