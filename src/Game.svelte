@@ -9,11 +9,12 @@ import GameHeader from './components/GameHeader.svelte';
 import TrumpSelect from './components/TrumpSelect.svelte';
 import Board from './components/Board.svelte';
 
-let activeCards = [], base = null, cards = [], tricks = [0, 0], mustSelectTrumpSuite = true;
+let activeCards = [], base = null, cards = [], tricks = [0, 0], trump = null;
+$: isSelectingTrump = !trump;
 
 function init(type) {
   $game.init(type);
-  mustSelectTrumpSuite = false;
+  trump = type;
 }
 
 onMount(() => {
@@ -40,12 +41,12 @@ $game.on('end', ({ winner: { members: [a, b] } }) => {
 </script>
 
 <div class="game h-screen w-screen flex flex-col">
-  {#if !mustSelectTrumpSuite}
-    <GameHeader {tricks} baseSuite={base} trumpSuite={$game.trumpSuite} />
+  {#if !isSelectingTrump}
+    <GameHeader {tricks} baseSuite={base} trumpSuite={trump} />
   {/if}
-  <Board squared={!mustSelectTrumpSuite}>
-    {#if mustSelectTrumpSuite}
-      <TrumpSelect on:select={init} />
+  <Board squared={!isSelectingTrump}>
+    {#if isSelectingTrump}
+      <TrumpSelect on:select={e => init(e.detail)} />
     {:else}
       {#each $game.players as player, i}
         <Move card={activeCards.find(c => c.owner === player)} bot={player.name !== 'me'} position={i} />
@@ -53,8 +54,8 @@ $game.on('end', ({ winner: { members: [a, b] } }) => {
     {/if}
   </Board>
   <section class="cards">
-    {#each sortCards(cards.slice(0, mustSelectTrumpSuite ? 5 : 13)) as card}
-      <Card number={card.number} type={card.type} on:click={() => $game.me.move(card)} clickable={!mustSelectTrumpSuite} />
+    {#each sortCards(cards.slice(0, isSelectingTrump ? 5 : 13)) as card}
+      <Card number={card.number} type={card.type} on:click={() => $game.me.move(card)} clickable={!isSelectingTrump} />
     {/each}
   </section>
 </div>
