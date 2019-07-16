@@ -33,7 +33,8 @@ export default {
         tailwind('tailwind.config.js'),
         production && purgeCss({
           content: ['./src/**/*.svelte', './public/index.html'],
-          defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || []
+          defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || [],
+          whitelistPatterns: [/position-(left|right|bottom|top)$/]
         }),
         production && autoprefixer
       ].filter(Boolean),
