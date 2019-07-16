@@ -1,5 +1,9 @@
-main.game-board
-  @apply flex justify-center items-center h-full flex-col mx-auto my-6 max-w-full relative
+.game-board-container
+  @apply flex justify-center items-center h-full w-full py-8 px-3 max-w-full
+  > .game-board
+    max-height: 100vw
+    @apply w-full h-full relative flex items-center justify-center flex-col mx-auto
+
 
 .move
   @apply flex items-center justify-center absolute
