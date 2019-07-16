@@ -1,25 +1,31 @@
-/** Event emitter */
+/** A custom event emitter. */
 export default class EE {
   constructor() {
     /**
-     * @typedef {{ event: string, callback: (...args: *[]) => * }} E
-     * @type {E[]}
+     * @typedef {{ event: string, callback: (...args: *[]) => *, once: boolean }} Listener
+     * @type {Listener[]}
      */
-    this._events = [];
+    this._listeners = [];
   }
 
-  on(event, callback) {
-    this._events.push({ event, callback });
+  on(event, callback, once = false) {
+    this._listeners.push({ event, callback, once });
   }
 
   emit(event, ...args) {
-    let b = false;
-    for (const e of this._events) {
-      if (e.event === event) {
-        if (!b) b = true;
-        e.callback(...args);
+    let bool = false;
+    const listeners = this._listeners;
+    for (let i = 0; i < listeners.length; i++) {
+      const li = listeners[i];
+      if (li.event === event) {
+        if (!bool) bool = true;
+        li.callback(...args);
+        if (li.once) {
+          listeners.splice(i, 1);
+          i--;
+        }
       }
     }
-    return b;
+    return bool;
   }
 }

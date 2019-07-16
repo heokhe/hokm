@@ -32,11 +32,9 @@ export class Player extends EE {
     return new Promise(r => {
       this.emit('must-move');
       this.on('move', card => {
-        if (!(card instanceof Card)) {
-          throw new TypeError(`expected Card, got ${card}`);
-        }
+        if (!(card instanceof Card)) throw new TypeError(`expected Card, got ${card}`);
         r(card);
-      });
+      }, true);
     });
   }
 
