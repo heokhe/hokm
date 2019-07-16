@@ -4,6 +4,15 @@
     max-height: 100vw
     @apply w-full h-full relative flex items-center justify-center flex-col mx-auto
 
+@function get-flex-direction($dir)
+  @if $dir == 'top'
+    @return 'column'
+  @else if $dir == 'bottom'
+    @return 'column-reverse'
+  @else if $dir == 'right'
+    @return 'row-reverse'
+  @else
+    @return 'row'
 
 .move
   @apply flex items-center justify-center absolute
@@ -11,3 +20,9 @@
     @apply flex items-center justify-center h-12 w-12 rounded-full bg-gray-100
     > svg > path
       @apply fill-blue-gray-600
+  @each $dir in 'top', 'right', 'bottom', 'left'
+    &.position-#{$dir}
+      #{$dir}: 0
+      flex-direction: unquote(get-flex-direction($dir))
+      > .card
+        margin-#{$dir}: .5rem
