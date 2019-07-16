@@ -40,3 +40,10 @@ export function toChunks(arr, len) {
   }
   return chunks;
 }
+
+/** @param {import('../card').Card[]} cards */
+export const sortCards = cards => cards.sort((a, b) => {
+  const at = a.type,
+    bt = b.type;
+  return at === bt ? a.number - b.number : (at > bt ? 1 : -1);
+});
