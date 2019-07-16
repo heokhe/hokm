@@ -279,6 +279,14 @@ module.exports = {
       outline: '0 0 0 3px rgba(52,144,220,0.5)',
       none: 'none'
     },
+    borderRadius: theme => ({
+      ...theme('spacing'),
+      none: 0,
+      sm: '.125rem',
+      default: '.25rem',
+      lg: '.5rem',
+      full: '99999px'
+    }),
     fill: { ...colors, current: 'currentColor' }
   },
   separator: '_'
