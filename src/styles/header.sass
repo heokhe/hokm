@@ -1,6 +1,11 @@
 header 
-  @apply shadow-md h-12 flex items-stretch flex-shrink-0 font-medium text-lg z-10
-  > .item 
-    @apply w-full flex items-center justify-center px-4
-    & + & 
-      @apply border-gray-200 border-l
+  @apply h-16 flex items-stretch flex-shrink-0 z-10 rounded-b-4 border-gray-200 border border-t-0 bg-gray-50 w-screen max-w-lg mx-auto
+  > .tricks
+    box-shadow: 0 0 0 1px #0001
+    @apply text-3xl font-light w-full rounded-b-4 overflow-hidden flex
+    > div
+      @apply w-full h-full flex items-center justify-center
+  > .item
+    @apply w-full flex items-center justify-center flex-col
+    > span
+      @apply text-gray-600 text-xs mt-1 font-medium

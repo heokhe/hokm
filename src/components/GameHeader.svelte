@@ -2,18 +2,23 @@
 import Icon from './Icon.svelte';
 import { game } from '../store';
 export let trumpSuite, baseSuite, tricks;
+const ICON_SIZE = 28;
+const isRed = type => type === 'K' || type === 'D';
 </script>
 
 <header>
-  <div class="item">
-    Trump Suite
-    <Icon size='1.2em' type={trumpSuite} />
+  <div class="item {isRed(trumpSuite) ? 'text-red-600' : 'text-blue-gray-800'}">
+    <Icon size={ICON_SIZE} type={trumpSuite} />
+    <span>
+      Trump Suite
+    </span>
   </div>
-  <div class="item">
-    Base Suite
-    <Icon size='1.2em' type={baseSuite} />
+  <div class="tricks">
+    <div class="bg-gray-100 text-deep-orange-600">{tricks[0]}</div>
+    <div>{tricks[1]}</div>
   </div>
-  <div class="item">
-    Tricks: {tricks.join(' - ')}
+  <div class="item {isRed(baseSuite) ? 'text-red-600' : 'text-blue-gray-800'}">
+    <Icon size={ICON_SIZE} type={baseSuite} />
+    <span>Base Suite</span>
   </div>
 </header>
