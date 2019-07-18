@@ -8,11 +8,10 @@ import { Player, Team } from './player';
 export default class Game extends EE {
   constructor() {
     super();
-    const allCards = distribute(),
-      players = allCards.map((cards, i) => {
-        let p = new Player(i ? `bot${i}` : 'me', this, cards);
-        if (i) p = wrapAsBot(p);
-        return p;
+    const players = distribute().map((cards, i) => {
+        const player = new Player(i ? `bot${i}` : 'me', this, cards);
+        if (i) wrapAsBot(player);
+        return player;
       }),
       [a, b, c, d] = players;
     this.teams = [new Team(a, c), new Team(b, d)];

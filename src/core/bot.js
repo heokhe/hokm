@@ -7,5 +7,4 @@ export default function wrapAsBot(me) {
     await wait(1000);
     me.move(decide(me));
   });
-  return me;
 }
