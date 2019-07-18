@@ -1,6 +1,5 @@
 <script>
 import Icon from './Icon.svelte';
-import { game } from '../store';
 export let trumpSuite, baseSuite, tricks;
 const ICON_SIZE = 28;
 const isRed = type => type === 'K' || type === 'D';
