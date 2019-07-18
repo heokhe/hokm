@@ -12,6 +12,10 @@ export default class EE {
     this._listeners.push({ event, callback, once });
   }
 
+  addListeners(listeners) {
+    for (const key in listeners) this.on(key, listeners[key]);
+  }
+
   emit(event, ...args) {
     let bool = false;
     const listeners = this._listeners;
